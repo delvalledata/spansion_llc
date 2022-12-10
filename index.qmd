@@ -14,6 +14,7 @@ editor: visual
 ## Recapping Existing Agreement
 
 <hr>
+
 <br>
 
 Among other things, the application approved between Del Valle + Spansion LLC on August agreed to the following[^1]:
@@ -32,9 +33,10 @@ Among other things, the application approved between Del Valle + Spansion LLC on
 ## Example Scenario: Before Agreement
 
 <hr>
+
 <br>
 
-Suppose you planned to build a facility that would end up being appraised for $120 million dollars. 
+Suppose you planned to build a facility that would end up being appraised for \$120 million dollars.
 
 ```{r}
 #| echo: false
@@ -71,9 +73,11 @@ ggiraph(ggobj = ex_gg,
 ## Example Scenario: After Agreement
 
 <hr>
+
 <br>
 
-My understanding is that the agreement you executed with Del Valle ISD on August 16th would reduce your taxable value by $40 million.
+My understanding is that the agreement you executed with Del Valle ISD on August 16th would reduce your taxable value by \$40 million.
+
 ```{r}
 #| echo: false
 library(tidyverse)
@@ -116,7 +120,7 @@ ggiraph(ggobj = ex_gg,
 
 # Supplemental Payments
 
-## Example Scenario: $40M Savings
+## Example Scenario: \$40M Savings
 
 <hr>
 
@@ -160,7 +164,7 @@ ggiraph(ggobj = ex_gg,
         height_svg = 1.75)
 ```
 
-And, in any scenario, Spansion LLC would pay DVISD $100 per student for any savings in excess of the limitation. Is that correct? For example..
+And, in any scenario, Spansion LLC would pay DVISD \$100 per student for any savings in excess of the limitation. Is that correct? For example..
 
 $$ \$100_\text{Per Student}*\text{11,000 Students} = \color{red}{\textbf{\$1.1 Million}}$$
 
@@ -168,13 +172,13 @@ $$ \$100_\text{Per Student}*\text{11,000 Students} = \color{red}{\textbf{\$1.1 M
 
 ## Qualifying Jobs
 
-“Qualifying job” means a permanent, full-time job that:
+"Qualifying job" means a permanent, full-time job that:
 
-* requires at least 1,600 hours of work a year;
-* is not transferred from one area in this state to another area in this state;
-* is not created to replace a previous employee;
-* is covered by a group health benefit plan for which the business offers to pay at least 80 percent of the premiums or other charges assessed for employee-only coverage under the plan, regardless of whether an employee may voluntarily waive the coverage; and
-* pays at least 110 percent of the county average weekly wage for manufacturing jobs in the county where the job is located.
+-   requires at least 1,600 hours of work a year;
+-   is not transferred from one area in this state to another area in this state;
+-   is not created to replace a previous employee;
+-   is covered by a group health benefit plan for which the business offers to pay at least 80 percent of the premiums or other charges assessed for employee-only coverage under the plan, regardless of whether an employee may voluntarily waive the coverage; and
+-   pays at least 110 percent of the county average weekly wage for manufacturing jobs in the county where the job is located.
 
 ## Original Spansion Agreement: 100 Jobs
 
