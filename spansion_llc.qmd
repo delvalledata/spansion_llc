@@ -1,0 +1,273 @@
+---
+title: "Spansion LLC + DVISD<br>"
+subtitle: "Amendment to Existing 313 Agreement"
+date: "today"
+date-format: long
+author: "Matt Worthington"
+format:
+  revealjs: 
+    include-in-header: header.html 
+    theme: [default, custom.scss]
+editor: visual
+---
+
+## Recapping Existing Agreement
+
+<hr>
+<br>
+
+Among other things, the application approved between Del Valle + Spansion LLC on August agreed to the following[^1]:
+
+[^1]: [August 16, 2022 Meeting Minutes](https://meetings.boardbook.org/Documents/CustomMinutesForMeeting/675?meeting=541240)
+
+-   It capped Spansion LLC's M+O Taxable Values at \$80 million dollars[^2].
+-   Guaranteed 40 "qualifying" jobs and 60 qualifying jobs.[^3]
+
+[^2]: [See Page 176 of August 16th, 2022 Meeting Agenda](https://meetings.boardbook.org/Documents/CustomAgendaForMeeting/675?meeting=541240)
+
+[^3]: [See Page 174 of August 16th, 2022 Meeting Agenda](https://meetings.boardbook.org/Documents/CustomAgendaForMeeting/675?meeting=541240)
+
+# Value Limitation
+
+## Example Scenario: Before Agreement
+
+<hr>
+<br>
+
+Suppose you planned to build a facility that would end up being appraised for $120 million dollars. 
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(hrbrthemes)
+library(ggiraph)
+
+ex_1 <- tibble(
+  value_lbl = c("Limited Value", "Actual Value"),
+  value = c(80000000, 120000000)
+)
+
+ex_gg <- ex_1 |> 
+  filter(value_lbl == "Actual Value") |> 
+  ggplot() +
+  aes(y = "Value",  x = value) +
+  geom_col(alpha = 0.8) +
+  geom_text(aes(y = "Value", x = 60000000), 
+            label = "Actual Value",
+            fontface = "bold",
+            color = "white") +
+  theme_ipsum() +
+  theme(axis.text.y = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  labs(x = NULL,
+       y = NULL) +
+  scale_x_comma(labels = scales::dollar_format(scale=0.000001, suffix = "M"))
+
+ggiraph(ggobj = ex_gg,
+        width = 1,
+        height_svg = 2.5)
+```
+
+## Example Scenario: After Agreement
+
+<hr>
+<br>
+
+My understanding is that the agreement you executed with Del Valle ISD on August 16th would reduce your taxable value by $40 million.
+```{r}
+#| echo: false
+library(tidyverse)
+library(hrbrthemes)
+library(ggiraph)
+
+ex_1 <- tibble(
+  value_lbl = c("Limited Value", "Actual Value"),
+  value = c(80000000, 120000000)
+)
+
+ex_gg <- ex_1 |> 
+  filter(value_lbl == "Actual Value") |> 
+  ggplot() +
+  aes(y = "Value",  x = value) +
+  geom_col(alpha = 0.8) +
+  geom_col(data = ex_1 |> filter(value_lbl == "Limited Value"),
+           aes(y = "Value",  x = value),
+           fill = "red",
+           alpha = 0.8) +
+  geom_text(aes(y = "Value", x = 40000000), 
+            label = "Limited Value ($80M)",
+            fontface = "bold",
+            color = "white") +
+  geom_text(aes(y = "Value", x = 100000000), 
+            label = "Savings ($40M)",
+            fontface = "bold",
+            color = "white") +
+  theme_ipsum() +
+  theme(axis.text.y = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  labs(x = NULL,
+       y = NULL) +
+  scale_x_comma(labels = scales::dollar_format(scale=0.000001, suffix = "M"))
+
+ggiraph(ggobj = ex_gg,
+        width = 1,
+        height_svg = 2.5)
+```
+
+# Supplemental Payments
+
+## Example Scenario: $40M Savings
+
+<hr>
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(hrbrthemes)
+library(ggiraph)
+
+ex_1 <- tibble(
+  value_lbl = c("Limited Value", "Actual Value"),
+  value = c(80000000, 120000000)
+)
+
+ex_gg <- ex_1 |> 
+  filter(value_lbl == "Actual Value") |> 
+  ggplot() +
+  aes(y = "Value",  x = value) +
+  geom_col(alpha = 0.8) +
+  geom_col(data = ex_1 |> filter(value_lbl == "Limited Value"),
+           aes(y = "Value",  x = value),
+           fill = "red",
+           alpha = 0.8) +
+  geom_text(aes(y = "Value", x = 40000000), 
+            label = "Limited Value ($80M)",
+            fontface = "bold",
+            color = "white") +
+  geom_text(aes(y = "Value", x = 100000000), 
+            label = "Savings ($40M)",
+            fontface = "bold",
+            color = "white") +
+  theme_ipsum() +
+  theme(axis.text.y = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  labs(x = NULL,
+       y = NULL) +
+  scale_x_comma(labels = scales::dollar_format(scale=0.000001, suffix = "M"))
+
+ggiraph(ggobj = ex_gg,
+        width = 1,
+        height_svg = 1.75)
+```
+
+And, in any scenario, Spansion LLC would pay DVISD $100 per student for any savings in excess of the limitation. Is that correct? For example..
+
+$$ \$100_\text{Per Student}*\text{11,000 Students} = \color{red}{\textbf{\$1.1 Million}}$$
+
+# Jobs Benefit in Del Valle
+
+## Qualifying Jobs
+
+“Qualifying job” means a permanent, full-time job that:
+
+* requires at least 1,600 hours of work a year;
+* is not transferred from one area in this state to another area in this state;
+* is not created to replace a previous employee;
+* is covered by a group health benefit plan for which the business offers to pay at least 80 percent of the premiums or other charges assessed for employee-only coverage under the plan, regardless of whether an employee may voluntarily waive the coverage; and
+* pays at least 110 percent of the county average weekly wage for manufacturing jobs in the county where the job is located.
+
+## Original Spansion Agreement: 100 Jobs
+
+<hr>
+
+In the original agreement, Spansion LLC agreed to provide 100 jobs. 40 were qualifying. 60 were non-qualifying. In Del Valle, qualifying wage would be \$68,558.60 for a total qualifying jobs guarantee of \$2,742,344 during period of agreement.
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(hrbrthemes)
+library(ggiraph)
+
+ex_1 <- tibble(
+  value_lbl = c("Qualifying", "Non-Qualifying"),
+  value = c(40, 60)
+)
+
+ex_gg <- ex_1 |> 
+  filter(value_lbl == "Qualifying") |>
+  ggplot() +
+  aes(y = "Value",  x = value) +
+  geom_col(alpha = 0.6,
+           fill = "blue") +
+  geom_col(aes(y = "Value",  x = 100),
+           fill = "darkblue",
+           alpha = 0.6) +
+  geom_text(aes(y = "Value", x = 20), 
+            label = "Qualifying",
+            fontface = "bold",
+            color = "white") +
+  geom_text(aes(y = "Value", x = 70), 
+            label = "Non-Qualifying",
+            fontface = "bold",
+            color = "white") +
+  theme_ipsum() +
+  theme(axis.text.y = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  labs(x = NULL,
+       y = NULL) +
+  scale_x_comma(labels = scales::number_format(scale=1, suffix = " Jobs"))
+
+ggiraph(ggobj = ex_gg,
+        width = 1,
+        height_svg = 2.25)
+```
+
+## Current Amendment's Impact
+
+<hr>
+
+In the current proposal, Spansion LLC is asking to eliminate 15 qualifying jobs and all 60 non-qualifying jobs. Is that right?
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(hrbrthemes)
+library(ggiraph)
+
+ex_1 <- tibble(
+  value_lbl = c("Qualifying", "Non-Qualifying"),
+  value = c(40, 60)
+)
+
+ex_gg <- ex_1 |> 
+  filter(value_lbl == "Qualifying") |>
+  ggplot() +
+  aes(y = "Value",  x = value) +
+  geom_col(aes(y = "Value",  x = 25),
+           alpha = 0.6,
+           fill = "blue") +
+  geom_col(aes(y = "Value",  x = 100),
+           fill = "darkblue",
+           # color = "blue",
+           alpha = 0) +
+  geom_text(aes(y = "Value", x = 12.5), 
+            label = "25 Qualifying",
+            fontface = "bold",
+            color = "white") +
+  geom_text(aes(y = "Value", x = 56.25), 
+            label = "75 Total Jobs Eliminated",
+            fontface = "bold",
+            color = "black") +
+  annotate(geom = "rect", alpha = 0, color = "#6d6d6d", linetype = 2,
+           xmin = 25, xmax = 100, ymin = .55, ymax = 1.45) +
+  theme_ipsum() +
+  theme(axis.text.y = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  labs(x = NULL,
+       y = NULL) +
+  scale_x_comma(labels = scales::number_format(scale=1, suffix = " Jobs"))
+
+ggiraph(ggobj = ex_gg,
+        width = 1,
+        height_svg = 2.25)
+```

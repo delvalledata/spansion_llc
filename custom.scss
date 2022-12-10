@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+/*-- scss:defaults --*/
+
+$font-family-sans-serif: 'Whitney SSm A', 'Whitney SSm B', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial;
+$presentation-heading-font: 'Ringside Narrow SSm A', 'Ringside Narrow SSm B',  -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial;
+$presentation-heading-text-transform: uppercase;
+$presentation-heading-color: #D52E1D;
+$font-family-monospace: 'JetBrains Mono', monospace;
+$presentation-font-size-root: 30px;
+$body-bg: #ffffff;
+$body-color: #2d2d2d;
+$presentation-title-slide-text-align: left;
+
+/*-- scss:rules --*/
+
+.slide-deck {
+  border: 3px solid #dee2e6;
+  width: 99%;
+  max-width: 100% !important;
+  height: 60vh;
+}
+
+.reveal .footnotes ol li:before {
+  text-indent: 0em !important;
+}
+
+.title-hr {
+  margin: 30px 0px !important;
+}
+
+.reveal .quarto-title-block .quarto-title-authors {
+  display: flex;
+  justify-content: left;
+}
+
+.reveal .quarto-title-block .quarto-title-authors .quarto-title-author {
+  padding-left: 0em;
+  padding-right: 0em;
+  text-transform: uppercase;
+  font-family: 'Ringside Narrow SSm A', 'Ringside Narrow SSm B',  -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial;
+  color: #8d8d8d;
+}
+
+.hc-tooltip {
+  font-family: $font-family-sans-serif;
+}
+
+.reveal ul {
+  list-style-type: none !important;
+    padding: 0 !important;
+  margin: 0 !important;
+}
+
+li {
+  padding-left: 1em;
+  text-indent: -.7em;
+}
+
+.reveal .slide sup {
+  font-size: 0.6em;
+  font-weight: 700;
+  color: rgb(42, 118, 221);
+}
+
+li::before {
+  content: "•️ ";
+  color: #D52E1D; /* or whatever color you prefer */
+}
+
+.aside-footnotes>li::before {
+  content: none;
+}
+
+.reveal .slide-logo {
+  max-height: 3.5rem !important;
+}
+
+.reveal .slide blockquote {
+  border-left: 3px solid $text-muted;
+  padding-left: 0.5em;
+}
+
+.reveal table td {
+  text-align: inherit !important;
+  padding: .2em .5em .2em .5em !important;
+  border-bottom: inherit !important;
+}
+
+text {
+  font-family: $font-family-sans-serif !important;
+}
+
+text.actor>tspan {
+  font-family: $presentation-heading-font !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+}
+
+.nodeLabel {
+  font-family: $presentation-heading-font !important;
+  font-size: 18px !important;
+  padding: 30px !important;
+  font-weight: 700 !important;
+}
+
+.fa {
+  padding-top: 35px !important;
+  padding-bottom: 20px !important;
+  padding-right: 20px !important;
+  font-size: 4rem !important;
+}
+
+mermaid.flowchartConfig {
+    width: 100%
+}
+
+.rect.rect {
+        rx: 5 !important;
+}
+
+#title-slide {
+  margin-top: 100px !important;
+}
+
+.title {
+  font-weight: 700 !important;
+  color: #D52E1D !important;
+  text-transform: uppercase !important;
+}
+
+.reveal .slide .absolute {
+  border: 5px solid black;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.subtitle {
+  color: #4d4d4d !important;
+  font-weight: 500 !important;
+  font-size: 2.3rem;
+}
+
+.author {
+}
+
+.institute {
+  font-weight: 300 !important;
+  font-style: italic !important;
+  color: #535353;
+}
+
+h1, {
+  font-family: $font-family-sans-serif;
+  font-weight: 800;
+  text-transform: uppercase !important;
+  color: var(--header-color);
+}
+
+h2, h3 {
+  font-family: $font-family-sans-serif;
+  font-weight: 700;
+  text-transform: initial !important;
+  color: var(--header-color);
+}
+
+h4 {
+  font-family: $font-family-sans-serif;
+  font-weight: 500;
+  color: #606060 !important;
+}
