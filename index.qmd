@@ -14,7 +14,6 @@ editor: visual
 ## Recapping Existing Agreement
 
 <hr>
-
 <br>
 
 Among other things, the application approved between Del Valle + Spansion LLC on August agreed to the following[^1]:
@@ -23,20 +22,22 @@ Among other things, the application approved between Del Valle + Spansion LLC on
 
 -   It capped Spansion LLC's M+O Taxable Values at \$80 million dollars[^2].
 -   Guaranteed 40 "qualifying" jobs and 60 qualifying jobs.[^3]
+-   It effectively reduces your tax liability between now and 2038 by an estimate $8.9 million dollars[^4].
 
 [^2]: [See Page 176 of August 16th, 2022 Meeting Agenda](https://meetings.boardbook.org/Documents/CustomAgendaForMeeting/675?meeting=541240)
 
 [^3]: [See Page 174 of August 16th, 2022 Meeting Agenda](https://meetings.boardbook.org/Documents/CustomAgendaForMeeting/675?meeting=541240)
+
+[^4]: [See Attachment A of Certification Packet on Texas Comptroller Site](https://assets.comptroller.texas.gov/ch313/1696/1696-del-spansion-cert.pdf)
 
 # Value Limitation
 
 ## Example Scenario: Before Agreement
 
 <hr>
-
 <br>
 
-Suppose you planned to build a facility that would end up being appraised for \$120 million dollars.
+Suppose you planned to build a facility that would end up being appraised for $120 million dollars. 
 
 ```{r}
 #| echo: false
@@ -53,12 +54,13 @@ ex_gg <- ex_1 |>
   filter(value_lbl == "Actual Value") |> 
   ggplot() +
   aes(y = "Value",  x = value) +
-  geom_col(alpha = 0.8) +
+  geom_col(alpha = 0.3) +
   geom_text(aes(y = "Value", x = 60000000), 
             label = "Actual Value",
+            family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
             fontface = "bold",
-            color = "white") +
-  theme_ipsum() +
+            color = "#2d2d2d") +
+  theme_ipsum(base_family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'") +
   theme(axis.text.y = element_blank(),
         panel.grid.major.y = element_blank()) +
   labs(x = NULL,
@@ -73,10 +75,9 @@ ggiraph(ggobj = ex_gg,
 ## Example Scenario: After Agreement
 
 <hr>
-
 <br>
 
-My understanding is that the agreement you executed with Del Valle ISD on August 16th would reduce your taxable value by \$40 million.
+My understanding is that the agreement you executed with Del Valle ISD on August 16th would [reduce your taxable value by $40 million]{style="background-color: #c2f0c2;"}.
 
 ```{r}
 #| echo: false
@@ -93,20 +94,23 @@ ex_gg <- ex_1 |>
   filter(value_lbl == "Actual Value") |> 
   ggplot() +
   aes(y = "Value",  x = value) +
-  geom_col(alpha = 0.8) +
+  geom_col(fill = "#29a329",
+           alpha = 0.4) +
   geom_col(data = ex_1 |> filter(value_lbl == "Limited Value"),
            aes(y = "Value",  x = value),
            fill = "red",
-           alpha = 0.8) +
+           alpha = 0.7) +
   geom_text(aes(y = "Value", x = 40000000), 
             label = "Limited Value ($80M)",
             fontface = "bold",
+            family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
             color = "white") +
   geom_text(aes(y = "Value", x = 100000000), 
             label = "Savings ($40M)",
             fontface = "bold",
-            color = "white") +
-  theme_ipsum() +
+            family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
+            color = "black") +
+  theme_ipsum(base_family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'") +
   theme(axis.text.y = element_blank(),
         panel.grid.major.y = element_blank()) +
   labs(x = NULL,
@@ -118,9 +122,162 @@ ggiraph(ggobj = ex_gg,
         height_svg = 2.5)
 ```
 
+## Impact on M+O: Existing Agreement  
+<hr>
+
+The net impact of the \$80 Million cap is an estimated [\$1 Billion reduction]{style="background-color: #c2f0c2;"} in Spansion's taxable M+O value over a 9-year period. 
+
+```{r}
+#| echo: false
+#| eval: false
+library(googlesheets4)
+library(tidyverse)
+library(hrbrthemes)
+library(ggiraph)
+
+url <- "https://docs.google.com/spreadsheets/d/1CgRJnjalxVkjVbZsdtK6b9rkoHS7I_o-fYgx3GZAe-o/edit#gid=1591780990"
+
+wo_impact <- read_sheet(url, sheet = "Without Incentives") |> 
+  janitor::clean_names() |> 
+  filter(!is.na(year)) |> 
+  select(-x4) |> 
+  pivot_longer(cols = estimated_taxable_value_for_i_s:estimated_total_property_taxes,
+               values_to = "wo_limits") |> glimpse()
+
+with_impact <- read_sheet(url, sheet = "With Incentives") |> 
+  janitor::clean_names() |> 
+  filter(!is.na(year)) |> 
+  select(-x4) |> 
+  pivot_longer(cols = estimated_taxable_value_for_i_s:estimated_total_property_taxes,
+               values_to = "with_limits") |> glimpse()
+
+act_impact <- wo_impact |> 
+  left_join(with_impact, by = c("year", "name")) |> 
+  mutate(impact = wo_limits - with_limits)
+
+arrow::write_parquet(act_impact, "spansion_delvalle_limitation_data.parquet")
+```
+
+```{r}
+act_impact <- arrow::read_parquet("spansion_delvalle_limitation_data.parquet") |>
+  filter(name == "estimated_taxable_value_for_m_o") |> 
+  mutate(wo_lbl = scales::dollar(wo_limits, scale=0.000001, accuracy = 0.01, suffix = "M"),
+         impact_lbl = if_else(impact < 1000000,
+                              scales::dollar(impact, scale=0.001, accuracy = 1, suffix = "K"),
+                              scales::dollar(impact, scale=0.000001, accuracy = 1, suffix = "M")))
+
+act_gg <- act_impact |> 
+  ggplot() +
+  aes(y = with_limits,  x = year) +
+  geom_col_interactive(data = act_impact,
+           aes(y = wo_limits,  x = year), 
+           fill = "#29a329",
+           alpha = 0.4) +
+    geom_col_interactive(alpha = 0.7,
+           fill = "red") +
+    geom_hline(yintercept = 80000000,
+               color = "#6d6d6d",
+               linetype = 2) +
+    geom_text_interactive(data = act_impact |> filter(impact!=0),
+            aes(y = wo_limits, label = impact_lbl, x = year),
+            fontface = "bold",
+            vjust = -0.5,
+            size = 2.15,
+            family = "Ringside Narrow SSm A",
+            color = "#1f7a1f") +
+  geom_curve(data = data.frame(x = 2034.54524826865, y = 174950345.902679, xend = 2033.73411856584, yend = 84977557.721121),
+             mapping = aes(x = x, y = y, xend = xend, yend = yend),
+             curvature = 0.1, arrow = arrow(30L, unit(0.1, "inches"),
+                                            "last", "closed"),
+             inherit.aes = FALSE) + 
+  geom_label(data = data.frame(x = 2035.41646165315, y = 173627216.664715, label = "$80 Million M+O Cap "),
+             mapping = aes(x = x, y = y, label = label),
+             label.padding = unit(0.25, "lines"),
+             label.r = unit(0.25, "lines"),
+             size = 2.5,
+             family = "Ringside Narrow SSm A",
+             inherit.aes = FALSE) +
+  theme_ipsum() +
+  theme(panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        axis.text.x = element_text(size = 7, family = "Ringside Narrow SSm A"),
+        axis.text.y = element_text(size = 7, family = "Ringside Narrow SSm A")) +
+  labs(x = NULL,
+       y = NULL) +
+  scale_x_continuous(breaks = c(2024, 2026, 2028, 2030, 2032, 2034, 2036, 2038)) +
+  scale_y_comma(labels = scales::dollar_format(scale=0.000001, accuracy = 1, suffix = "M"),
+                limits = c(0, 400000000))
+
+ggiraph(ggobj = act_gg,
+        width = 1,
+        height_svg = 3)
+```
+
+## Impact on Tax Liability: Existing Agreement
+<hr>
+
+The net impact of the value limitation is an estimated [$8.9 million reduction]{style="background-color: #c2f0c2;"} in Spansion's tax liabililty over a 9-year period. 
+
+```{r}
+act_impact <- arrow::read_parquet("spansion_delvalle_limitation_data.parquet") |>
+  filter(name == "del_valle_isdm_o_tax_levy") |> 
+  mutate(wo_lbl = scales::dollar(wo_limits, scale=0.000001, accuracy = 0.01, suffix = "M"),
+         impact_lbl = if_else(impact < 1000000,
+                              scales::dollar(impact, scale=0.001, accuracy = 1, suffix = "K"),
+                              scales::dollar(impact, scale=0.000001, accuracy = 0.1, suffix = "M")))
+
+act_gg <- act_impact |> 
+  ggplot() +
+  aes(y = with_limits,  x = year) +
+  geom_hline(yintercept = 697600,
+             color = "#6d6d6d",
+             linetype = 2) +
+  geom_col_interactive(data = act_impact,
+                       aes(y = wo_limits,  x = year), 
+                       fill = "#29a329",
+                       alpha = 0.4) +
+  geom_col_interactive(alpha = 0.7,
+                       fill = "red") +
+  geom_text_interactive(data = act_impact |> filter(impact!=0),
+                        aes(y = wo_limits, label = impact_lbl, x = year),
+                        fontface = "bold",
+                        vjust = -0.5,
+                        size = 2.25,
+                        family = "Ringside Narrow SSm A",
+                        color = "#1f7a1f") +
+  geom_curve(data = data.frame(x = 2029.50208185774, y = 2399119.08906237, xend = 2026.1215759008, yend = 1785517.90495652),
+             mapping = aes(x = x, y = y, xend = xend, yend = yend),
+             angle = 85L, curvature = 0.4, arrow = arrow(30L, unit(0.1, "inches"),
+                                                         "last", "closed"),
+             inherit.aes = FALSE) + 
+  ggtext::geom_richtext(data = data.frame(x = 2029.56032720078, y = 2487541.70823018, label = "<span style = 'color:#2eb82e;'>Savings</span>"),
+                        mapping = aes(x = x, y = y, label = label),
+                        size = 2.5,
+                        family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
+                        label.padding = unit(0.25, "lines"),
+                        label.r = unit(0.15, "lines"),
+                        inherit.aes = FALSE) +
+  theme_ipsum(base_family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'") +
+  theme(panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        axis.text.x = element_text(size = 7, family = "Ringside Narrow SSm A"),
+        axis.text.y = element_text(size = 7, family = "Ringside Narrow SSm A")) +
+  labs(x = NULL,
+       y = NULL) +
+  scale_x_continuous(breaks = c(2024, 2026, 2028, 2030, 2032, 2034, 2036, 2038)) +
+  scale_y_comma(labels = scales::dollar_format(scale=0.000001, accuracy = 1, suffix = "M"),
+                limits = c(0, 3500000))
+
+ggiraph(ggobj = act_gg,
+        width = 1,
+        height_svg = 3)
+```
+
 # Supplemental Payments
 
-## Example Scenario: \$40M Savings
+## Example Scenario: $40M Savings
 
 <hr>
 
@@ -147,12 +304,14 @@ ex_gg <- ex_1 |>
   geom_text(aes(y = "Value", x = 40000000), 
             label = "Limited Value ($80M)",
             fontface = "bold",
+            family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
             color = "white") +
   geom_text(aes(y = "Value", x = 100000000), 
             label = "Savings ($40M)",
+            family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
             fontface = "bold",
             color = "white") +
-  theme_ipsum() +
+  theme_ipsum(base_family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'") +
   theme(axis.text.y = element_blank(),
         panel.grid.major.y = element_blank()) +
   labs(x = NULL,
@@ -164,27 +323,27 @@ ggiraph(ggobj = ex_gg,
         height_svg = 1.75)
 ```
 
-And, in any scenario, Spansion LLC would pay DVISD \$100 per student for any savings in excess of the limitation. Is that correct? For example..
+In any scenario, Spansion LLC would pay DVISD $100 per student for any savings in excess of the limitation. Is that correct? For example..
 
-$$ \$100_\text{Per Student}*\text{11,000 Students} = \color{red}{\textbf{\$1.1 Million}}$$
+$$ \$100_\text{Per Student}*9,675.142_\text{ADA} = \color{red}{\textbf{\$965.5k}}$$
 
 # Jobs Benefit in Del Valle
 
 ## Qualifying Jobs
 
-"Qualifying job" means a permanent, full-time job that:
+“Qualifying job” means a permanent, full-time job that:
 
--   requires at least 1,600 hours of work a year;
--   is not transferred from one area in this state to another area in this state;
--   is not created to replace a previous employee;
--   is covered by a group health benefit plan for which the business offers to pay at least 80 percent of the premiums or other charges assessed for employee-only coverage under the plan, regardless of whether an employee may voluntarily waive the coverage; and
--   pays at least 110 percent of the county average weekly wage for manufacturing jobs in the county where the job is located.
+* requires at least 1,600 hours of work a year;
+* is not transferred from one area in this state to another area in this state;
+* is not created to replace a previous employee;
+* is covered by a group health benefit plan for which the business offers to pay at least 80 percent of the premiums or other charges assessed for employee-only coverage under the plan, regardless of whether an employee may voluntarily waive the coverage; and
+* pays at least 110 percent of the county average weekly wage for manufacturing jobs in the county where the job is located.
 
 ## Original Spansion Agreement: 100 Jobs
 
 <hr>
 
-In the original agreement, Spansion LLC agreed to provide 100 jobs. 40 were qualifying. 60 were non-qualifying. In Del Valle, qualifying wage would be \$68,558.60 for a total qualifying jobs guarantee of \$2,742,344 during period of agreement.
+In the original agreement, Spansion LLC agreed to provide 100 jobs. 40 were qualifying. 60 were non-qualifying. In Del Valle, qualifying annual wages would be \$68,558.60 for a [total annual qualifying jobs guarantee valued at \$2,742,344]{style="background-color: #c2f0c2;"} during the period of agreement.
 
 ```{r}
 #| echo: false
@@ -208,13 +367,15 @@ ex_gg <- ex_1 |>
            alpha = 0.6) +
   geom_text(aes(y = "Value", x = 20), 
             label = "Qualifying",
+            family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
             fontface = "bold",
             color = "white") +
   geom_text(aes(y = "Value", x = 70), 
             label = "Non-Qualifying",
+            family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
             fontface = "bold",
             color = "white") +
-  theme_ipsum() +
+  theme_ipsum(base_family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'") +
   theme(axis.text.y = element_blank(),
         panel.grid.major.y = element_blank()) +
   labs(x = NULL,
@@ -230,7 +391,7 @@ ggiraph(ggobj = ex_gg,
 
 <hr>
 
-In the current proposal, Spansion LLC is asking to eliminate 15 qualifying jobs and all 60 non-qualifying jobs. Is that right?
+In the current proposal, Spansion LLC is asking to eliminate 15 qualifying jobs and all 60 non-qualifying jobs. The elimination of [the 15 qualifying jobs reduction would be roughly $1 million each year in lost guaranteed wages]{style="background-color: #ffcccc;"} to our community in Del Valle. Is that right?
 
 ```{r}
 #| echo: false
@@ -256,15 +417,17 @@ ex_gg <- ex_1 |>
            alpha = 0) +
   geom_text(aes(y = "Value", x = 12.5), 
             label = "25 Qualifying",
+            family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
             fontface = "bold",
             color = "white") +
   geom_text(aes(y = "Value", x = 56.25), 
             label = "75 Total Jobs Eliminated",
             fontface = "bold",
+            family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'",
             color = "black") +
   annotate(geom = "rect", alpha = 0, color = "#6d6d6d", linetype = 2,
            xmin = 25, xmax = 100, ymin = .55, ymax = 1.45) +
-  theme_ipsum() +
+  theme_ipsum(base_family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'") +
   theme(axis.text.y = element_blank(),
         panel.grid.major.y = element_blank()) +
   labs(x = NULL,
