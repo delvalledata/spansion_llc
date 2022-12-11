@@ -391,7 +391,7 @@ ggiraph(ggobj = ex_gg,
 
 <hr>
 
-In the current proposal, Spansion LLC is asking to eliminate 15 qualifying jobs and all 60 non-qualifying jobs. The elimination of [the 15 qualifying jobs reduction would be roughly $1 million each year in lost guaranteed wages]{style="background-color: #ffcccc;"} to our community in Del Valle. Is that right?
+In the current proposal, Spansion LLC is asking to eliminate 15 qualifying jobs and all 60 non-qualifying jobs. The elimination of [the 15 qualifying jobs reduction would be roughly $1 million each year in lost guaranteed wages]{style="background-color: #ffcccc;"} to our community in Del Valle. 
 
 ```{r}
 #| echo: false
