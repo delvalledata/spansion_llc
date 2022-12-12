@@ -197,14 +197,16 @@ act_gg <- act_impact |>
              size = 2.5,
              family = "Ringside Narrow SSm A",
              inherit.aes = FALSE) +
-  theme_ipsum() +
+  theme_ipsum(base_family = "'Ringside Narrow SSm A', 'Ringside Narrow SSm B'") +
   theme(panel.grid.minor.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_blank(),
+        plot.caption = element_text(size = 6),
         axis.text.x = element_text(size = 7, family = "Ringside Narrow SSm A"),
         axis.text.y = element_text(size = 7, family = "Ringside Narrow SSm A")) +
   labs(x = NULL,
-       y = NULL) +
+       y = NULL,
+       caption = "Source: Texas Comptroller's Website | Del Valle ISD No. 1696, Spansion LLC | Certification Packet") +
   scale_x_continuous(breaks = c(2024, 2026, 2028, 2030, 2032, 2034, 2036, 2038)) +
   scale_y_comma(labels = scales::dollar_format(scale=0.000001, accuracy = 1, suffix = "M"),
                 limits = c(0, 400000000))
@@ -262,10 +264,12 @@ act_gg <- act_impact |>
   theme(panel.grid.minor.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_blank(),
+        plot.caption = element_text(size = 6),
         axis.text.x = element_text(size = 7, family = "Ringside Narrow SSm A"),
         axis.text.y = element_text(size = 7, family = "Ringside Narrow SSm A")) +
   labs(x = NULL,
-       y = NULL) +
+       y = NULL,
+       caption = "Source: Texas Comptroller's Website | Del Valle ISD No. 1696, Spansion LLC | Certification Packet") +
   scale_x_continuous(breaks = c(2024, 2026, 2028, 2030, 2032, 2034, 2036, 2038)) +
   scale_y_comma(labels = scales::dollar_format(scale=0.000001, accuracy = 1, suffix = "M"),
                 limits = c(0, 3500000))
@@ -343,7 +347,7 @@ $$ \$100_\text{Per Student}*9,675.142_\text{ADA} = \color{red}{\textbf{\$965.5k}
 
 <hr>
 
-In the original agreement, Spansion LLC agreed to provide 100 jobs. 40 were qualifying. 60 were non-qualifying. In Del Valle, qualifying annual wages would be \$68,558.60 for a [total annual qualifying jobs guarantee valued at \$2,742,344]{style="background-color: #c2f0c2;"} during the period of agreement.
+In the original agreement, Spansion LLC agreed to provide 100 jobs. 40 were qualifying. 60 were non-qualifying. In this agreement, qualifying annual wages is set at \$68,558.60. At that wage, [the total annual guaranteed wages for **40 qualifying jobs** would be **\$2,742,344**]{style="background-color: #c2f0c2;"}.
 
 ```{r}
 #| echo: false
@@ -387,7 +391,7 @@ ggiraph(ggobj = ex_gg,
         height_svg = 2.25)
 ```
 
-## Current Amendment's Impact
+## Proposed Amendment's Impact
 
 <hr>
 
